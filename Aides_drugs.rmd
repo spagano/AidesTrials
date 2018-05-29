@@ -1,6 +1,6 @@
 ---
 title: "Aides Tests"
-author: "Dr K"
+author: "Sean Pagano"
 date: "May 24, 2017"
 output: html_document
 ---
@@ -16,12 +16,198 @@ Atriplavast<-read.csv(file="Atriplavast.csv",header=TRUE)
 
 #Instructions
 
-Three new preventative aides drugs were tested in clinical trials in 2015. The trial designs were modeled after the famous RV_144 Aides Trials in Tailand in 2009.  Analyze and report on the apparent effectiveness of the three different drugs. Does sex of the participant seem to be a factor for any of the drugs?
+Three new preventative aides drugs were tested in clinical trials in 2015. The trial designs were modeled after the famous RV_144 Aides Trials in Thailand in 2009.  Analyze and report on the apparent effectiveness of the three different drugs. Does sex of the participant seem to be a factor for any of the drugs?
 
 
 # Genvoyabub
 
 We will subset the data by sex to see if the drug is sex specific.
+
+```{r }
+genovoya <- xtabs (~infected +group, data=Genvoyabub) 
+genovoya
+```
+
+For group who was infected with AIDS, there were 101 who took Genovoyabub, and 110 who took the placebo.
+
+For group who was infected with None, there were 2361 who took Genovoyabub, and 2352 who took the placebo.
+
+Lets take a further look into the data.
+
+Infected vs. Group Two-way table:
+
+```{r }
+rowPerc(genovoya)
+```
+
+For the people who were infected with AIDS, 47.87% took Genovoyabub, and 52.13% took the placebo.
+
+For the people who were infected with None, 50.10% took Genovoyabub and 49.90% took the placebo.
+
+After reviewing the numerical data, people who were infected group with AIDS who took Genovoyabub a slightly smaller infection rate than those who took the placebo. The group who was not infected did not show much of a difference either.
+
+Lets look at the groups
+
+Group vs. Infected Two-way table: 
+
+```{r }
+colPerc(genovoya)
+```
+
+For the people who took Genovoyabub, 4.1% recieved AIDS, and 95.9% recieved none.
+
+For the people who took the placebo, 4.47% recieved AIDS, and 95.53% recieved none.
+
+After reviewing the numerical data, people who took Genovoyabub had a slightly smaller AIDS infection rate than those who took the placebo. The groups where not infected reflect that small difference.
+
+Now that we have reviewed the numerical data, we will construct a bar chart to examine the graphical results of the data.
+
+```{r }
+barchartGC (genovoya, type="percent")
+```
+
+After inputing the data into a barchart, it does appear that poeple who got AIDS and recieved Genvoyabub have a lower occurance than those who got AIDS and and recieved the placebo. However, we cannot see a differnece in the group who didnt get AIDS.
+
+Now that we have graphically viewed that data, we will run an inferrential test to test their relationship
+
+Let us begin by forming our two hypotheses:
+
+    $H_0:$ Getting the AIDS virus is independent of taking Genvoyabub.
+    $H_A:$ Getting the AIDS virus is dependent of taking Genvoyabub.
+
+```{r }
+chisqtestGC(genovoya)
+```
+
+The p-value returned from the chi-squared test is 0.5735 which suggests that the probablity of returning a sample similar to this one is about %57 of the time. Since the p-value is higher than .05% we will fail to reject the null hypothesis, therefore there is not a relationship between recieving the vaccine and getting AIDS.
+Conclusion
+
+From the three tests we ran on the data for AIDS and Genvoyabub, we have seen that there is not a relationship between the drug and getting the virus. We saw the evidence outlined in the numerical test, barchart, and chi squared test. They showed us that people who take Genvoyabub had a slightl less occurrence of AIDS than those who took the placebo. The differences were all too small, making the groups almost equal. Therefore, from these tests we can conclude that, Genvoyabub does not work effectivley to treat the AIDS virus.
+
+We will subset the data by sex to see if the drug is sex specific.
+
+# Genvoyabub Females
+
+Let us review the numerical results
+
+```{r }
+GF<- filter(Genvoyabub, sex=="F")
+GF2<- xtabs (~infected +group, data=GF)
+GF2
+```
+
+For group of females who were infected with AIDS, there were 54 who took Genvoyabub, and 62 who took the placebo.
+
+For group of females who was infected with None, there were 1177 who took Genvoyabub, and 1169 who took the placebo.
+
+Infected vs. Group Two-way table: 
+
+```{r }
+rowPerc(GF2)
+```
+
+For the females who were infected with AIDS, 46.55% took Genvoyabub, and 53.45% took the placebo.
+
+For the females who were infected with None, 50.17% took Genvoyabub and 49.83% took the placebo.
+
+After reviewing the numerical data, women in the AIDS infected group, who took Genvoyabub had a noticeably lower infection rate than those who took the placebo. The group who was not infected did not show much of a difference.
+
+Group vs. Infected Two-way table: 
+```{r }
+colPerc(GF2)
+```
+
+
+For the females who took Genvoyabub, 4.39% recieved AIDS, and 95.61% recieved none.
+
+For the females who took the placebo, 5.04% recieved AIDS, and 94.96% recieved none.
+
+After reviewing the numerical data, females who took Genvoyabub had a lower rate of AIDS infection than those who took the placebo. The difference is also reflected right under with the groups who were not infected.
+
+Now that we have reviewed the numerical data for women, we will construct a bar chart to examine the graphical results of the data.
+
+```{r }
+barchartGC (GF2, type="percent")
+```
+
+After inputing the data into a barchart, it appears that the female groups who were infected with AIDS that recieved the Genvoyabub vaccine recieved a slightly lower occurence of AIDS, than the group who got the placebo. The group who did not get AIDS, the vaccine and placebo groups are nearly similar.
+
+Now that we have graphically viewed that data, we will run an inferrential test to test their relationship
+
+Let us begin by forming our two hypotheses:
+
+    $H_0:$ For women, getting the AIDS virus is independent of taking Genvoyabub.
+    $H_A:$ For women, getting the AIDS virus is dependent of taking Genvoyabub.
+
+```{r }
+chisqtestGC(GF2)
+```
+
+The p-value returned from the chi-squared test is 0.5055 which suggests that the probablity of returning a sample similar to this one is about 50% of the time. Since the p-value is higher than .05% we fail to reject the null hypothesis, therefore there is not a relationship between recieving the vaccine and getting AIDS, for women.
+Conclusion
+
+From the three tests we ran on the data from females. We have seen that there is not a relationship between the drug and getting the virus. We saw the evidence outlined in the numerical test, barchart, and chi squared test. They showed us that women who take Genvoyabub had a slightly less occurrence of AIDS than those who took the placebo. The differences were all too small, making the groups almost equal. Therefore, from these tests we can conclude that, Genvoyabub does not work effectivley to treat the AIDS virus, for women.
+
+Now for the men
+
+    Genvoyabub males
+
+Let us review the numerical results
+```{r }
+GM<- filter (Genvoyabub, sex=="M")
+GM2<- xtabs (~infected +group, data=GM)
+GM2
+```
+
+For group of males who were infected with AIDS, there were 47 who took Genvoyabub, and 48 who took the placebo.
+
+For group of males who was infected with None, there were 1184 who took Genvoyabub, and 1183 who took the placebo.
+
+Infected vs. Group Two-way table:
+
+```{r }
+rowPerc(GM2)
+```
+
+For the males who were infected with AIDS, 49.47% took Genvoyabub, and 50.53% took the placebo.
+
+For the males who were infected with None, 50.02% took Genvoyabub and 49.98% took the placebo.
+
+After reviewing the numerical data, men in the AIDS infected group, who took Genvoyabub had a tiny difference in the infection rate than those who took the placebo. The group who was not infected did not show much of a difference.
+
+Group vs. Infected Two-way table:
+
+```{r }
+colPerc(GM2)
+```
+
+For the males who took Genvoyabub, 3.82% recieved AIDS, and 96.18% recieved none.
+
+For the males who took the placebo, 3.9% recieved AIDS, and 96.1% recieved none.
+
+After reviewing the numerical data, males who took Genvoyabub had a very small rate of AIDS infection than those who took the placebo, its almsot equal. The difference is also reflected right under with the groups who were not infected.
+
+Now that we have reviewed the numerical data for men, we will construct a bar chart to examine the graphical results of the data.
+
+```{r }
+barchartGC(GM2, type="percent")
+```
+
+After inputing the data into a barchart, it appears that the male groups who were infected with AIDS reflect a tiny difference between the percent of occurance of AIDS, they are almost equal. The group who did not get AIDS, there is no differnce shown.
+
+Let us begin by forming our two hypotheses:
+
+    $H_0:$ For men, getting the AIDS virus is independent of taking Genvoyabub.
+    $H_A:$ For men, getting the AIDS virus is dependent of taking Genvoyabub.
+
+```{r }
+chisqtestGC(GM2)
+```
+
+The p-value returned from the chi-squared test is 1 which suggests that the probablity of returning a sample similar to this one is about %100 of the time. Since the p-value is higher than .05% we will fail to reject the null hypothesis, therefore there is not a relationship between recieving the vaccine and getting AIDS, for men.
+Conclusion
+
+From the three tests we ran on the data from the males. We have seen that there is not a relationship between the drug and getting the virus. We saw the evidence outlined in the numerical test, barchart, and chi squared test. They showed us that men who take Genvoyabub had a slightly less occurrence of AIDS than those who took the placebo. The differences were all too tiny, making the groups almost equal. Therefore, from these tests we can conclude that, Genvoyabub does not work effectivley to treat the AIDS virus, for men.
 
 
 # Atriplavast
@@ -37,5 +223,8 @@ We will subset the data by sex to see if the drug is sex specific.
 
 
 
+
+
+# Conclusions
 
 
